@@ -1096,6 +1096,8 @@ CanvasDock::CanvasDock(obs_data_t *settings, QWidget *parent)
 	}
 
 	preview_disabled = obs_data_get_bool(settings, "preview_disabled");
+        clip_only_mode = obs_data_get_bool(settings, "clip_only_mode");
+        clip_only_mode = obs_data_get_bool(settings, "clip_only_mode");
 
 	virtual_cam_warned = obs_data_get_bool(settings, "virtual_cam_warned");
 
@@ -1297,6 +1299,7 @@ CanvasDock::CanvasDock(obs_data_t *settings, QWidget *parent)
 	streamButtonGroup->layout()->addWidget(streamButtonMulti);
 
 	buttonRow->addWidget(streamButtonGroup);
+        streamButtonGroup->setVisible(!clip_only_mode);
 
 	recordButton = new QPushButton;
 	recordButton->setMinimumHeight(30);
@@ -6608,6 +6611,7 @@ obs_encoder_t *CanvasDock::GetStreamAudioEncoder()
 
 void CanvasDock::StartStream()
 {
+        if (clip_only_mode) { return; }
 	bool to_start = false;
 	for (auto it = streamOutputs.begin(); it != streamOutputs.end(); ++it) {
 		if (obs_output_active(it->output)) {
@@ -6912,6 +6916,8 @@ obs_data_t *CanvasDock::SaveSettings()
 	obs_data_set_int(save_data, "height", canvas_height);
 	obs_data_set_int(save_data, "partner_block", partnerBlockTime);
 	obs_data_set_bool(save_data, "preview_disabled", preview_disabled);
+        obs_data_set_bool(save_data, "clip_only_mode", clip_only_mode);
+        obs_data_set_bool(save_data, "clip_only_mode", clip_only_mode);
 	obs_data_set_bool(save_data, "virtual_cam_warned", virtual_cam_warned);
 	obs_data_set_int(save_data, "streaming_video_bitrate", streamingVideoBitrate);
 	obs_data_set_bool(save_data, "streaming_match_main", streamingMatchMain);

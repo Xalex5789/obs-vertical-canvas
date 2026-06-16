@@ -172,6 +172,9 @@ OBSBasicSettings::OBSBasicSettings(CanvasDock *canvas_dock, QMainWindow *parent)
 
 	generalLayout->addRow(QString::fromUtf8(obs_frontend_get_locale_string("Basic.VCam.VirtualCamera")), virtualCameraMode);
 
+    clipOnlyMode = new QCheckBox(QString::fromUtf8(obs_module_text("ClipOnlyMode")));
+    generalLayout->addRow(QString::fromUtf8(obs_module_text("ClipOnlyModeLabel")), clipOnlyMode);
+
 	auto backtrackGroup = new QGroupBox;
 	backtrackGroup->setStyleSheet(QString("QGroupBox{ padding-top: 4px;}"));
 	auto backtrackLayout = new QFormLayout;
@@ -1134,6 +1137,7 @@ void OBSBasicSettings::LoadSettings()
 
 	resolution->setEnabled(enable);
 	virtualCameraMode->setCurrentIndex(canvasDock->virtual_cam_mode);
+    clipOnlyMode->setChecked(canvasDock->clip_only_mode);
 	recordVideoBitrate->setValue(canvasDock->recordVideoBitrate ? canvasDock->recordVideoBitrate : 6000);
 	maxTimeEnable->setChecked(canvasDock->max_time_sec > 0);
 	maxTime->setValue(canvasDock->max_time_sec);
@@ -1262,6 +1266,7 @@ void OBSBasicSettings::SaveSettings()
 	}
 	if (virtualCameraMode->currentIndex() >= 0)
 		canvasDock->virtual_cam_mode = virtualCameraMode->currentIndex();
+    canvasDock->clip_only_mode = clipOnlyMode->isChecked();
 
 	uint32_t bitrate = (uint32_t)recordVideoBitrate->value();
 	if (bitrate != canvasDock->recordVideoBitrate) {

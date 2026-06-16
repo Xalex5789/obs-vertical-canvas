@@ -95,6 +95,9 @@ private:
 	QVBoxLayout *mainLayout;
 	OBSQTDisplay *preview;
 	bool preview_disabled = false;
+    bool clip_only_mode = false;
+    bool clip_only_mode = false;
+    bool clip_only_mode = false;
 	QFrame *previewDisabledWidget;
 	QPushButton *configButton;
 	OBSWeakSource source;
